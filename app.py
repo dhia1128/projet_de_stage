@@ -191,6 +191,7 @@ def banque_emettrice():
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+    
     plt.close()
     return render_template('banque_emettrice.html', plot_url=plot_url)  
     
