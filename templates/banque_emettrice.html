@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Répartition des Transactions par Banque Émettrice</h1>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Graphique des Transactions par Banque Émettrice</h5>
+                <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Graphique des Transactions par Banque Émettrice">
+            </div>
+        </div>
+    </div>  
+</div>
+<a href="/dashboard" class="btn btn-primary">Voir le tableau de bord</a>
+<a href="/" class="btn btn-secondary">Retour à l'accueil</a>
+{% endblock %}
+
+{% block scripts %} 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

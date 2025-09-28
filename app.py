@@ -64,6 +64,13 @@ def load_data():
 def index():
     return render_template('index.html')
 
+@app.route('/api/transactions_par_heure')
+def api_transactions_par_heure():
+    df = load_data()
+    transactions_par_heure = df.groupby(df['timestamp'].dt.hour).size()
+    heures = transactions_par_heure.index.tolist()
+    transactions = transactions_par_heure.values.tolist()
+    return jsonify({'heures': heures, 'transactions': transactions})
 # Tableau de bord avec statistiques
 @app.route('/dashboard')
 def dashboard():
@@ -169,7 +176,24 @@ def time_series():
     
     return render_template('time_series.html', plot_url=plot_url)
 
-
+# Lancer l'application
+@app.route('/banque_emettrice')
+def banque_emettrice():
+    df=load_data()
+    bq_emmetteur=df['banque_aquereur']
+    plt.figure(figsize=(10,6))   
+    sns.countplot(data=df,y=bq_emmetteur)
+    plt.title('Répartition des transactions par banque émettrice')
+    plt.xlabel('Nombre de transactions')
+    plt.ylabel('Banque émettrice')
+    plt.tight_layout()
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+    plt.close()
+    return render_template('banque_emettrice.html', plot_url=plot_url)  
+    
 
 
 if __name__ == '__main__':
