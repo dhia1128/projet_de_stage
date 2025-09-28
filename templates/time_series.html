@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Séries Temporelles</h2>
+    <div id="timeSeriesChart"></div>
+    <a href="/dashboard">Voir le tableau de bord</a>
+    <a href="/">Retour à l'accueil</a>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var data = {{ plot_data | safe }};
+        var layout = {
+            title: 'Séries Temporelles',
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Valeur' }
+        };
+        Plotly.newPlot('timeSeriesChart', data, layout);
+    </script>
+{% endblock %} 

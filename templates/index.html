@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4">Analyse des Transactions BIAT</h1>
+        <p class="lead">Outil d'analyse des transactions financières de la Banque Internationale Arabe de Tunisie</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Tableau de bord</h5>
+                <p class="card-text">Visualisez les statistiques et tendances des transactions</p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-light">Explorer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Liste des transactions</h5>
+                <p class="card-text">Parcourez l'ensemble des transactions enregistrées</p>
+                <a href="{{ url_for('transactions') }}" class="btn btn-light">Voir les transactions</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">À propos</h5>
+                <p class="card-text">Solution développée pour l'analyse des données financières BIAT</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h2>Fonctionnalités</h2>
+        <ul>
+            <li>Visualisation des transactions par heure de la journée</li>
+            <li>Analyse par type de transaction et montant</li>
+            <li>Répartition géographique des transactions</li>
+            <li>Statistiques par type de carte bancaire</li>
+            <li>Navigation through all transactions with pagination</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Tableau de bord des Transactions</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total des Transactions</h5>
+                <p class="card-text display-6">{{ total_transactions }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Montant Total</h5>
+                <p class="card-text display-6">{{ total_montant | round(2) }} TND</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Montant Moyen</h5>
+                <p class="card-text display-6">{{ montant_moyen | round(2) }} TND</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Visualisation des Données</h5>
+                <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Graphiques d'analyse">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Top Types de Transactions</h5>
+                <canvas id="transactionsChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Transactions par Heure</h5>
+                <canvas id="hourlyChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Graphique des types de transactions
+const transactionsCtx = document.getElementById('transactionsChart').getContext('2d');
+const transactionsChart = new Chart(transactionsCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ top_transactions.keys() | list | tojson }},
+        datasets: [{
+            data: {{ top_transactions.values() | list }},
+            backgroundColor: [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Charger les données des transactions par heure
+fetch("{{ url_for('api_transactions_par_heure') }}")
+    .then(response => response.json())
+    .then(data => {
+        const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+        const hourlyChart = new Chart(hourlyCtx, {
+            type: 'bar',
+            data: {
+                labels: data.heures,
+                datasets: [{
+                    label: 'Nombre de transactions',
+                    data: data.transactions,
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
