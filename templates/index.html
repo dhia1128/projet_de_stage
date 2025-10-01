@@ -5,6 +5,7 @@
     <div class="col-md-12 text-center mb-5">
         <h1 class="display-4">Analyse des Transactions BIAT</h1>
         <p class="lead">Outil d'analyse des transactions financières de la Banque Internationale Arabe de Tunisie</p>
+        <img src="{{ url_for('static', filename='images/biat_logo.png') }}" alt="BIAT Logo" class="img-fluid" style="max-height: 150px;">   
     </div>
 </div>
 
@@ -49,4 +50,6 @@
         </ul>
     </div>
 </div>
+<a href="/dashboard" class="btn btn-primary">Voir le tableau de bord</a>
+<a href="/" class="btn btn-secondary">Retour à l'accueil</a>
 {% endblock %}

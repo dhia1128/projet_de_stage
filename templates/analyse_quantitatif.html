@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Analyse Quantitative des Transactions</h1> 
+<p>Cette section fournit une analyse quantitative des transactions bancaires, y compris des statistiques clés et des visualisations pour mieux comprendre les données.</p>
+<h2 class="mt-4">Statistiques Clés</h2>
+<ul>
+    <li>Montant Total des Transactions : {{ total_amount }}</li>
+    <li>Montant Moyen par Transaction : {{ average_amount }}</li>
+    <li>Nombre Total de Transactions : {{ total_transactions }}</li>
+</ul>
+<h2 class="mt-4">Visualisations</h2>
+            <div class="card-body">
+                <h5 class="card-title">Graphique d'analyse des Transactions </h5>
+                <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Graphique  d'analyse des Transactions ">
+            </div>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Répartition des Transactions par Type</h3>
+        <canvas id="transactionTypeChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h3>Montant des Transactions par Heure</h3>
+        <canvas id="transactionHourChart"></canvas>
+    </div>
+</div>
+<a href="/dashboard" class="btn btn-primary mt-4">Voir le tableau de bord
+</a>
+<a href="/" class="btn btn-secondary mt-4">Retour à l'accueil</a>
+{% endblock %}
+

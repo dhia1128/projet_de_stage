@@ -10,34 +10,38 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <image/png src="{{ url_for('static', filename='biat_logo.png') }}" alt="BIAT Logo" width="40" height="40" class="d-inline-block align-text-top me-2">   
             <a class="navbar-brand" href="{{ url_for('index') }}">BIAT Analytics</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+        </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('index') }}">Accueil</a>
+                    </li>                    <!-- ...existing code... -->
+                    <!-- ...existing code... -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('upload_file') }}">Uploader CSV</a>    
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Tableau de bord</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">about</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('upload_file') }}">Uploader CSV</a>    
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('time_series') }}">Séries Temporelles</a>
-                    </li>   
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('banque_emettrice') }}">Banque Émettrice</a>
                     </li>   
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('analyse_quantitatif') }}">Analyse Quantitative</a>
+                    </li>
+                                        <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">about</a>
+                    </li>
                 </ul>
             </div>
         </div>

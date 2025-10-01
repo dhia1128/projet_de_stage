@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import numpy as np
-import matplotlib
+import matplotlib 
 matplotlib.use('Agg')  # Utilisation en mode non interactif
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -17,8 +17,7 @@ app.config['ALLOWED_EXTENSIONS'] = {'csv'}
 app.jinja_env.globals.update(float=float)
 # ...existing code...
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
+'''def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
             return "Aucun fichier sélectionné", 400
@@ -32,11 +31,31 @@ def upload_file():
             return render_template('upload_success.html', filename=file.filename)
         else:
             return "Format de fichier non supporté. Veuillez uploader un fichier CSV.", 400
-    return render_template('upload.html',)
+    return render_template('upload.html',)'''
+# ...existing code...
 # ...existing code...
 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return "Aucun fichier sélectionné", 400
+        file = request.files['file']
+        if file.filename == '':
+            return "Nom de fichier vide", 400
+        if file and file.filename.endswith('.csv'):
+            # Lire le fichier CSV directement depuis le flux
+            df = pd.read_csv(file, encoding='utf-8')
+            # ...nettoyage et analyse si besoin...
+            # Afficher la page de succès
+            return render_template('upload_success.html', filename=file.filename)
+        else:
+            return "Format de fichier non supporté. Veuillez uploader un fichier CSV.", 400
+    return render_template('upload.html')
+# ...existing code...
 # Charger les données
 def load_data():
+    
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'transactions_biat.csv')
     
     df = pd.read_csv(file_path, encoding='utf-8')
@@ -54,8 +73,8 @@ def load_data():
     })
     
     # Corriger les types de données
-    df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
     df['montant'] = pd.to_numeric(df['montant'], errors='coerce')
+    df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
     
     return df
 
@@ -155,45 +174,53 @@ def transactions():
 def about():
     return render_template('about.html')
 #route pour les serie temporelles
-@app.route('/time_series')
-def time_series():
-    df = load_data()
-    df.set_index('timestamp', inplace=True)
-    time_series_data = df.resample('D').size()
-    
-    # Convertir le graphique en image base64
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(time_series_data.index, time_series_data.values)
-    ax.set_title('Transactions au Fil du Temps')
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Nombre de Transactions')
-    
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
-    plt.close()
-    
-    return render_template('time_series.html', plot_url=plot_url)
+
 
 # Lancer l'application
 @app.route('/banque_emettrice')
 def banque_emettrice():
     df=load_data()
     bq_emmetteur=df['banque_aquereur']
-    plt.figure(figsize=(10,6))   
+    plt.figure(figsize=(20,20))   
+    plt.subplot(1,2,1)
     sns.countplot(data=df,y=bq_emmetteur)
     plt.title('Répartition des transactions par banque émettrice')
     plt.xlabel('Nombre de transactions')
     plt.ylabel('Banque émettrice')
     plt.tight_layout()
+    plt.subplot(1,2,2)
+    sns.set_style("darkgrid")
+    plt.pie(bq_emmetteur.value_counts(),labels=bq_emmetteur.value_counts().index,autopct='%1.1f%%')
+    plt.title('Répartition des transactions par banque émettrice')
+    plt.tight_layout()
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode('utf8')
-    
     plt.close()
     return render_template('banque_emettrice.html', plot_url=plot_url)  
+@app.route('/analyse_quantitatif')
+def analyse_quantitatif():
+    df=load_data()
+    montant=df['montant']
+    plt.figure(figsize=(20,10))   
+    plt.subplot(1,2,1)
+    sns.histplot(montant,bins=30,kde=True)
+    plt.title('Distribution des montants des transactions')
+    plt.xlabel('Montant')
+    plt.ylabel('Fréquence')
+    plt.tight_layout()
+    plt.subplot(1,2,2)
+    sns.boxplot(x=montant)
+    plt.title('Boxplot des montants des transactions')
+    plt.xlabel('Montant')
+    plt.tight_layout()
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+    plt.close()
+    return render_template('analyse_quantitatif.html', plot_url=plot_url)
     
 
 
